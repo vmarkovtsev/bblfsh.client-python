@@ -11,8 +11,7 @@ def setup():
     )
     parser.add_argument("-e", "--endpoint", default="0.0.0.0:9432",
                         help="bblfsh gRPC endpoint.")
-    parser.add_argument("-f", "--file", required=True,
-                        help="File to parse.")
+    parser.add_argument("file", nargs="+", help="File to parse.")
     parser.add_argument("-l", "--language", default=None,
                         help="File's language. The default is to autodetect.")
     parser.add_argument("--disable-bblfsh-autorun", action="store_true",
@@ -27,7 +26,8 @@ def main():
     if not args.disable_bblfsh_autorun:
         ensure_bblfsh_is_running()
     client = BblfshClient(args.endpoint)
-    print(client.parse_uast(args.file, args.language))
+    for file in args.file:
+        print(client.parse_uast(file, args.language))
 
 
 if __name__ == "__main__":
